@@ -1,1 +1,1 @@
-# myBlog
+## this project is based on python flask-1.1.2 and the bootstrap.It's is my first project published in GitHub and I would record all the steps of this project from coding to deploying  on Tencent cloud service with docker.
