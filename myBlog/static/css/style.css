@@ -49,3 +49,13 @@ footer {
     border-radius: 3px;
     box-shadow: inset 0 0 10px rgba(27, 31, 35, 0.05);
 }
+
+.alert {
+    position: relative;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid #b8daff;
+    border-radius: 0.25rem;
+    color: #004085;
+    background-color: #cce5ff;
+  }

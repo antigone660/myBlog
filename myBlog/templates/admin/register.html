@@ -1,35 +1,7 @@
 {% from 'bootstrap/form.html' import render_form %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.js') }}" type="text/css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css">
-</head>
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
 
-{% block scripts %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.2.1.slim.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% block body %} 
+{{render_form(form)}}
 {% endblock %}
-
-<body>
-    
-        <main>
-            {% for message in get_flashed_messages(with_categories=True) %}
-        <div class="alert alert-{{ message[0] }}" role="alert">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            {{ message[1] }}
-        </div>
-    {% endfor %}
-        </main>    
-    {{ render_form(form) }}
-
-
-
-</body>
-</html>
