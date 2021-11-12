@@ -14,6 +14,7 @@ def create_app():
     return app
 
 
+
 def register_blueprints(app:Flask):
     app.register_blueprint(blueprint=blog_bp)
     app.register_blueprint(admin_bp)

@@ -11,4 +11,5 @@ def register():
     if form.validate_on_submit():
         flash('register successfully')
         return redirect(url_for("blog.index"))
+    flash("do u seek for me ?")
     return render_template('admin/register.html',form=form)
