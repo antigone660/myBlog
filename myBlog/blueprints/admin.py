@@ -1,8 +1,11 @@
+import random
+
 from flask import Blueprint,render_template,url_for,flash
 from werkzeug.utils import redirect
+from faker import Faker
 
 from myBlog.extensions import db
-from myBlog.modles import User
+from myBlog.modles import User,Admin,Category,Comment,Post,Link
 from myBlog.forms import registerForm
 admin_bp = Blueprint('admin',__name__)
 
@@ -22,11 +25,50 @@ def register():
 
 @admin_bp.route('/init')
 def init():
+    admin = Admin(
+        username='admin',
+        password='123456',
+        about='这个人很懒，什么也没有留下。'
+    )
+    db.drop_all()
     db.create_all()
-    return "init"
+    db.session.add(admin)
+    db.session.commit()
+    flash("init!")
+    return redirect(url_for("blog.index"))
 
 @admin_bp.route("/show")
 def show():
     res = User.query.first()
     
     return res.username
+
+@admin_bp.route("/fake")
+def fake_all():
+    fake_categories()
+    fake_posts()
+    flash("fake posts are generated!")
+    return redirect(url_for("blog.index"))
+
+fake = Faker()
+def fake_categories(count=10):
+    category=Category(name="Default")
+    db.session.add(category)
+    for i in range(count):
+        category = Category(name=fake.word())
+        db.session.add(category)
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+
+def fake_posts(count=20):
+    for i in range(count):
+        post = Post(
+            title=fake.text(50),
+            body=fake.text(2000),
+            category=Category.query.get(random.randint(1, Category.query.count())),
+            timestamp=fake.date_time_this_year()
+        )
+        db.session.add(post)
+    db.session.commit()

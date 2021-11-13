@@ -1,8 +1,16 @@
 {% from 'bootstrap/form.html' import render_form %}
 {% extends "base.html" %}
 {% block title %}
-register
+index
 {% endblock %}
 {% block body %}
-this is the register page
+    {% if posts  %}
+        {%  for post in posts  %}
+        <h3 class="text-primary"><a href="{{ url_for('.show_post', post_id=post.id) }}">{{ post.title }}</a></h3>
+        <p>
+        {{ post.body|striptags|truncate }}
+        <small><a href="{{ url_for('.show_post', post_id=post.id) }}">Read More</a></small>
+        </p>
+        {% endfor %}
+    {% endif %}
 {% endblock %}
