@@ -4,6 +4,7 @@ from wtforms import StringField, SubmitField, SelectField, TextAreaField, Valida
 from wtforms.validators import DataRequired, Email, Length, Optional, URL
 from wtforms.widgets.core import SubmitInput
 from flask_ckeditor import CKEditorField
+from myBlog.modles import Category
 
 class registerForm(FlaskForm):
     username = StringField('Username',validators=[DataRequired(),Length(2,10)])
@@ -22,3 +23,8 @@ class PostForm(FlaskForm):
     category = SelectField('Category', coerce=int, default=1)
     body = CKEditorField('Body', validators=[DataRequired()])
     submit = SubmitField()
+
+    def __init__(self, *args, **kwargs):
+        super(PostForm, self).__init__(*args, **kwargs)
+        self.category.choices = [(category.id, category.name)
+                                 for category in Category.query.order_by(Category.name).all()]

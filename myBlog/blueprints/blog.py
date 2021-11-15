@@ -1,10 +1,11 @@
+from datetime import date
 from operator import pos
 import re
 from flask import Blueprint,render_template,url_for,flash
 from wtforms.validators import Email
 from myBlog.extensions import db
-from myBlog.modles import Post,Comment
-from myBlog.forms import CommentForm
+from myBlog.modles import Category, Post,Comment
+from myBlog.forms import CommentForm, PostForm
 blog_bp = Blueprint('blog',__name__)
 
 @blog_bp.route('/',methods=["GET"])
@@ -32,4 +33,17 @@ def show_post(post_id):
         flash(" u publish a comment")
     return render_template("blog/post.html",post=post,comments=comments,form=form)
 
+@blog_bp.route('/post/new',methods=["GET","POST"])
+def new_post():
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(
+            title = form.title.data,
+            body = form.body.data,
+            category = Category.query.get(form.category.data)
+        )
+        db.session.add(post)
+        db.session.commit()
+        flash("u publish a new post now")
+    return render_template("blog/post_new.html",form=form)
 
