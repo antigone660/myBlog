@@ -11,6 +11,7 @@ class Admin(db.Model):
     password = db.Column(db.String(128))
     blog_title = db.Column(db.String(60))
     blog_sub_title = db.Column(db.String(100))
+    name = db.Column(db.String(30))
     about = db.Column(db.Text)
 
 class Category(db.Model):

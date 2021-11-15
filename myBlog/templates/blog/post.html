@@ -1,8 +1,20 @@
 {% from 'bootstrap/form.html' import render_form %}
 {% extends "base.html" %}
 {% block title %}
+<h1>
 {{ post.title }}
+</h1>
 {% endblock %}
 {% block body %}
+<p>
 {{post.body}}
+</p>
+{% if comments %}
+    {% for comment in comments %}
+        <p>
+        {{comment.author}}
+        </p>
+        {{comment.body}}
+    {% endfor %}
+{% endif %}
 {% endblock %}

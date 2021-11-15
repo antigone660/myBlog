@@ -23,6 +23,15 @@ def register():
     # flash("do u seek for me ?")
     return render_template('admin/register.html',form=form)
 
+@admin_bp.route('/log')
+def log():
+    pass
+
+@admin_bp.route('/publish')
+def publish():
+    pass
+
+
 @admin_bp.route('/init')
 def init():
     admin = Admin(
@@ -47,7 +56,8 @@ def show():
 def fake_all():
     fake_categories()
     fake_posts()
-    flash("fake posts are generated!")
+    fake_comments()
+    flash("fake messages are generated!")
     return redirect(url_for("blog.index"))
 
 fake = Faker()
@@ -71,4 +81,69 @@ def fake_posts(count=20):
             timestamp=fake.date_time_this_year()
         )
         db.session.add(post)
+    db.session.commit()
+
+def fake_comments(count=500):
+    for i in range(count):
+        comment = Comment(
+            author=fake.name(),
+            email=fake.email(),
+            # site=fake.url(),
+            body=fake.sentence(),
+            timestamp=fake.date_time_this_year(),
+            # reviewed=True,
+            post=Post.query.get(random.randint(1, Post.query.count()))
+        )
+        db.session.add(comment)
+
+    salt = int(count * 0.1)
+    for i in range(salt):
+        # unreviewed comments
+        comment = Comment(
+            author=fake.name(),
+            email=fake.email(),
+            site=fake.url(),
+            body=fake.sentence(),
+            timestamp=fake.date_time_this_year(),
+            reviewed=False,
+            post=Post.query.get(random.randint(1, Post.query.count()))
+        )
+        db.session.add(comment)
+
+        # from admin
+        comment = Comment(
+            author='Mima Kirigoe',
+            email='mima@example.com',
+            site='example.com',
+            body=fake.sentence(),
+            timestamp=fake.date_time_this_year(),
+            from_admin=True,
+            reviewed=True,
+            post=Post.query.get(random.randint(1, Post.query.count()))
+        )
+        db.session.add(comment)
+    db.session.commit()
+
+    # replies
+    for i in range(salt):
+        comment = Comment(
+            author=fake.name(),
+            email=fake.email(),
+            site=fake.url(),
+            body=fake.sentence(),
+            timestamp=fake.date_time_this_year(),
+            reviewed=True,
+            replied=Comment.query.get(random.randint(1, Comment.query.count())),
+            post=Post.query.get(random.randint(1, Post.query.count()))
+        )
+        db.session.add(comment)
+    db.session.commit()
+
+
+def fake_links():
+    twitter = Link(name='Twitter', url='#')
+    facebook = Link(name='Facebook', url='#')
+    linkedin = Link(name='LinkedIn', url='#')
+    google = Link(name='Google+', url='#')
+    db.session.add_all([twitter, facebook, linkedin, google])
     db.session.commit()

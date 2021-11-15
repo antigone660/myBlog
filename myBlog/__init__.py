@@ -32,6 +32,7 @@ def register_extensions(app):
 
 def register_commands(app:Flask):
     @app.cli.command()
-    def initDB():
+    @click.option('--drop', is_flag=True, help='Create after drop.')
+    def initDB(drop):
         db.create_all()
         click.echo("success")
